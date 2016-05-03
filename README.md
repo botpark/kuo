@@ -1,18 +1,18 @@
-# KUO
+[TOC]
 
-## ¿Que es Kou?
+# KUO
+## ¿QUE ES KUO?
 Es un servicio de windows, que gestiona un servidor sockect para el manejo e interacción de eventos del dispositivo biometrico ZK-F19 ID.
 
-## CLIENTE
+### CLIENTE
 
-1. Crear una estancia de conexion mediante el protocolo WebSocket, que puentea la comunicación entre el cliente y el servicio windows que corre de lado del servidor.
+ Crear una estancia de conexion mediante el protocolo WebSocket, que puentea la comunicación entre el cliente y el servicio windows que corre de lado del servidor.
 
-2. Estancia del Socket
+  Instancia del Socket
 ```js
 var socket = new WebSocket('ws://127.0.0.1:2012')
 ```
-
-3. Se crea el receptor de mensajes en el cliente. donde "evt" es el mensaje que emite el servidor.
+Se crea el receptor de mensajes en el cliente. donde "evt" es el mensaje que emite el servidor.
 
 ```js
 socket.onmessage = function (evt) {
@@ -37,23 +37,24 @@ socket.onmessage = function (evt) {
 	} 
 ```
 
-3.1 La data que se envia viente con 
-3.1.1 Incribir una huella dactilar.
+La data ejecuta los siguiente acciones:
+
+* Incribir huella dactilar.
 
 ```js
-	emit('fingerin', { user:  String(record.data.ID)})
+	emit('fingerin', { user:  String(IDUSUARIO)})
+```	
+
+* Recuperar huella del lector.
+```js
+       emit('fingerout', { user:  String(IDUSUARIO)})
+```
+* Registrar carnet.
+```js
+	   emit('cardin', { user: String(USER), name: String(HNOMBRE), card: String(ETIQ_ETIQUETA) })
 ```
 
-	3.1.2 Recuperar la huella del lector.
-```js
-       emit('fingerout', { user:  String(record.data.ID)})
-```
-	3.1.3 Registrar un carnet.
-```js
-	   emit('cardin', { user: String(HID_USER.getValue()), name: String(HNOMBRE_USER.getValue()), card: String(record.data.ETIQ_ETIQUETA) })
-```
-
-## SERVIDOR
+### SERVIDOR
 
 * Se dejan los siguientes atributos como estaticos en el servicio de windows.
 
@@ -68,9 +69,9 @@ socket.onmessage = function (evt) {
 ```
 * La ip del socket se toma por defecto como "127.0.0.1" ó "localhost"
 
-### METODOS Y EVENTOS DEL LECTOR
+#### METODOS Y EVENTOS DEL LECTOR
 
-#### METODOS 
+##### METODOS 
  
 ```c#
 	public void CapturarHuella(String usuarioID) {}
@@ -82,7 +83,7 @@ socket.onmessage = function (evt) {
 	public void RegistrarCarnet(string Carnet, string Nombre, string usuarioID) {}
 ```
 
-#### EVENTOS DEL LECTOR
+##### EVENTOS DEL LECTOR
 ```c#
 	private void GetCard(int card) {}
 ```
@@ -103,4 +104,3 @@ socket.onmessage = function (evt) {
 		int k
 	){}
 ```
-
