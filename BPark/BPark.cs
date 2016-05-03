@@ -136,17 +136,32 @@ namespace BPark
         {
             foreach (WebSocketSession session in appServer.GetAllSessions())
             {
-                session.Send(Convert.ToString("card = " + card));
+                session.Send(@"kuo = 
+                    {
+                        'type'   : 'regcard',
+                        'payload': {
+                            'card': '" + card + @"'
+                        } 
+                    }
+                ");
             }
         }
  
         private void GetType(string a, int b, int c, int d, int e, int f, int g, int h, int i, int j, int k)
         {
-            string type = d == 1 ? "HUELLA" : "TARJETA"; // d=tipo, a=usuario
+            string type = d == 1 ? "finger" : "card"; // d=tipo, a=usuario
 
             foreach (WebSocketSession session in appServer.GetAllSessions())
             {
-                session.Send(Convert.ToString("type = " + type + ", user = " + a));
+               // session.Send(Convert.ToString("type = " + type + ", user = " + a));
+                session.Send(@"kuo = 
+                    {
+                        'type'   : '" + type + @"',
+                        'payload': {
+                            'user': '" + a + @"'
+                        } 
+                    }
+                ");
             }
         }
         
