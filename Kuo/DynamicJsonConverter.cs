@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Script.Serialization;
 
-namespace BPark
+namespace Kuo
 {
 
     public sealed class DynamicJsonConverter : JavaScriptConverter

@@ -1,4 +1,4 @@
-﻿namespace BPark
+﻿namespace Kuo
 {
     partial class Installer
     {

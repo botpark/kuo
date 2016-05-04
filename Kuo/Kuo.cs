@@ -8,7 +8,7 @@ using SuperSocket.SocketBase;
 using System.Web.Script.Serialization;
 
 
-namespace BPark
+namespace Kuo
 {
     public partial class Kuo : ServiceBase
     {

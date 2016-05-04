@@ -7,8 +7,8 @@
     <ProjectGuid>{0D3ED169-AECA-4DB0-96BB-B713F327FCFF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BPark</RootNamespace>
-    <AssemblyName>BPark</AssemblyName>
+    <RootNamespace>Kuo</RootNamespace>
+    <AssemblyName>Kuo</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

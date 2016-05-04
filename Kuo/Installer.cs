@@ -6,7 +6,7 @@ using System.Configuration.Install;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BPark
+namespace Kuo
 {
     [RunInstaller(true)]
     public partial class Installer : System.Configuration.Install.Installer

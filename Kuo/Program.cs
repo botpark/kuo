@@ -1,6 +1,6 @@
 ﻿using System.ServiceProcess;
 
-namespace BPark
+namespace Kuo
 {
     static class Program
     {
