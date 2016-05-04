@@ -1,6 +1,6 @@
 ﻿namespace BPark
 {
-    partial class ProjectInstaller
+    partial class Installer
     {
         /// <summary>
         /// Required designer variable.
@@ -28,34 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.NagrandProcess = new System.ServiceProcess.ServiceProcessInstaller();
-            this.NagrandService = new System.ServiceProcess.ServiceInstaller();
+            this.Kuo = new System.ServiceProcess.ServiceProcessInstaller();
+            this.KuoService = new System.ServiceProcess.ServiceInstaller();
             // 
-            // NagrandProcess
+            // Kuo
             // 
-            this.NagrandProcess.Account = System.ServiceProcess.ServiceAccount.LocalSystem;
-            this.NagrandProcess.Password = null;
-            this.NagrandProcess.Username = null;
+            this.Kuo.Account = System.ServiceProcess.ServiceAccount.LocalSystem;
+            this.Kuo.Password = null;
+            this.Kuo.Username = null;
             // 
-            // NagrandService
+            // KuoService
             // 
-            this.NagrandService.Description = "Servicio que gestiona el dispositivo biometrico";
-            this.NagrandService.DisplayName = "Nagrand";
-            this.NagrandService.ServiceName = "BPark";
-            this.NagrandService.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
-            this.NagrandService.AfterInstall += new System.Configuration.Install.InstallEventHandler(this.serviceInstaller1_AfterInstall);
+            this.KuoService.Description = "Servicio que gestiona el dispositivo biometrico";
+            this.KuoService.DisplayName = "Kuo";
+            this.KuoService.ServiceName = "BPark";
+            this.KuoService.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
+            this.KuoService.AfterInstall += new System.Configuration.Install.InstallEventHandler(this.serviceInstaller1_AfterInstall);
             // 
             // ProjectInstaller
             // 
             this.Installers.AddRange(new System.Configuration.Install.Installer[] {
-            this.NagrandProcess,
-            this.NagrandService});
+            this.Kuo,
+            this.KuoService});
 
         }
 
         #endregion
 
-        private System.ServiceProcess.ServiceProcessInstaller NagrandProcess;
-        private System.ServiceProcess.ServiceInstaller NagrandService;
+        private System.ServiceProcess.ServiceProcessInstaller Kuo;
+        private System.ServiceProcess.ServiceInstaller KuoService;
     }
 }

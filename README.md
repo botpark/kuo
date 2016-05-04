@@ -1,106 +1,184 @@
-[TOC]
+# Kuo
 
-# KUO
-## ¿QUE ES KUO?
-Es un servicio de windows, que gestiona un servidor sockect para el manejo e interacción de eventos del dispositivo biometrico ZK-F19 ID.
+Kuo es un servicio de windows para la gestión del dispositivo Biometrico ZK-F19 ID. Como puente de cominicación el servicio instancia un servidor socket que es el encargado de emitir y de recibir data.
 
-### CLIENTE
+## Prerequisitos
+1. Es necesario .NET framework 4.5
+2. Tener instalado Visual Studio Installer, este se puede obtener mediante la busqueda de plugins y extensiones de Visual Studio.
+3. Es necesario Visual Studio 2015 Comunity Edition, para un mejor rendimiento, en compilación.
 
- Crear una estancia de conexion mediante el protocolo WebSocket, que puentea la comunicación entre el cliente y el servicio windows que corre de lado del servidor.
+## Instalación
 
-  Instancia del Socket
+### Modo Desarrollo
+En este modo simplemente se corre el sevicio en modo debug por Visual Studio y queda listo para ser consumido.
+
+### Modo Procucción
+Se brinda un instalador, en el siguiente enlace; [kuo Installer](http://www.google.com)
+
+## API
+
+### Conexión Socket
+WebSocket es un protocolo que al igual que http es usado para la comunicación entre el cliente y servidor, pero en este caso, http solo functiona en una sola dirección; el cliente realiza una petición y el servidor responde. Mientras que con sockets se abre un canal de comunicación en el que el servidor emite data cada ves que algo cambia.
+
+Para crear una sencilla conexión websocket desde JavaScript, es necesario crear la siguiente estancia.
+
 ```js
-var socket = new WebSocket('ws://127.0.0.1:2012')
+	var kuo = new WebSocket('ws://127.0.0.1:2012')
 ```
-Se crea el receptor de mensajes en el cliente. donde "evt" es el mensaje que emite el servidor.
+
+### Ajustando La libreria en el frontend
+Acontinuación se crea una funcionalidad con el que se pretende emitir data al servidor.
 
 ```js
-socket.onmessage = function (evt) {
+
+	function KuoS(){} // Clase KuoS
+    
+    // funcion emit de la clase KuoS
+    KuoS.prototype.emit = function(event, data) {
+        var msg = {
+            type: event,
+            payload: []
+        };
+        
+    	if(typeof data == 'object') {
+           msg.payload.push(data)
+        }
+    	
+    	kuo.send(JSON.stringify(msg));
+    }
+
+```
+
+### Emitiendo Eventos
+Una ves conectado el socket a nuestro servidor socket, que se encuentra corriendo como servicio de windows. podemos mandarle mensajes, para que este los interprete, lo que deja por consiguiente cada uno de los siguientes mensajes a emitir.
+
+pero antes de entender los eventos es necesario instanciar la nueva clase KuoS de la siguiente forma.
+
+```js
+	var ko = new KouS();
+```
+
+#### reconnect
+Permite reconectar el dispositivo Biometrico, no espera respuesta del callback.
+
+```js
+	ko.emit("reconnect");
+```
+
+#### recordcard
+Permite registrar un carnet en el dispositvo biometrico.
+
+```js
+	ko.emit("recordcard", 
+        { 
+            user: String("myUserId"), 
+            name: String("myName"), 
+            card: String("myCardNumber") 
+        }
+    );
+```
+
+### recordfinger
+Permite grabar una huella en el dispositivo biometrico. Tambien prepara al dispositivo y lo deja en este modo de guardado.
+```js
+	ko.emit("recordfinger", { user:  String("myUserId") });
+```
+
+### getfinger
+Recupera la huella de un usuario especifico, grabado en el dispositivo biometrico.
+
+```js
+	ko.emit("getfinger", { user:  String("myUserId") });
+```
+
+
+### default
+En caso de emitirse un evento no registrado, ejemplo;
+```js
+	ko.emit("pepe");
+```
+El callback encargado de interpretar, estos eventos simplemente sera ignorado, y retornara un mensaje como el siguiente:
+
+```js
+	var foo = "Evento No Registrado";
+```
+
+## Recibiendo data
+Ahora que ya hemos hablado de como el cliente emite X cantidad de eventos, es el turno del servidor y de como recibe la data el cliente.
+
+```js
+kuo.onmessage = function (evt) {
       console.log(evt.data);
 }
 ```
 
-4. se crea el emisor para  enviar datos al servicio de windows.
+donde ```"evt"``` contiene toda la data emitida por el servidor.
 
-* La estructura del msj esta estructurada en un type y un payload.
-* type: Es el tipo de acción que ejecutara el lector ZK-F9 ID.
-* payload: Es la información requerida para ejecutar cada type. 
+### getfinger
+En el caso de haber emitido un ```"getfinger"```, la data que recibe el cliente es la siguiente.
 
-```js
-	function emit(event, data) {
-		var msg = {
-			type: event,
-			payload: []
-		};
-		msg.payload.push(data)
-		socket.send(JSON.stringify(msg));
-	} 
+```json
+{
+    "type": "getfinger",
+    "payload": [
+        {
+            "user"  : "user",
+            "index" : "index",
+            "data"  : "data",
+            "length": "length"
+        }
+    ] 
+}
 ```
 
-La data ejecuta los siguiente acciones:
+### Eventos del Biometrico.
 
-* Incribir huella dactilar.
+#### card
 
-```js
-	emit('fingerin', { user:  String(IDUSUARIO)})
-```	
+En caso de que no exista un usuario en el dispositivo con la tarjeta detectada, el servidor emite lo siguiente:
 
-* Recuperar huella del lector.
-```js
-       emit('fingerout', { user:  String(IDUSUARIO)})
-```
-* Registrar carnet.
-```js
-	   emit('cardin', { user: String(USER), name: String(HNOMBRE), card: String(ETIQ_ETIQUETA) })
+```json
+{
+    "type"   : "regcard",
+    "payload": {
+        "card": "myNumberCard"
+    } 
+}
 ```
 
-### SERVIDOR
+En caso de que exista un usuario en el dispositivo biometrico se emite lo siguiente:
 
-* Se dejan los siguientes atributos como estaticos en el servicio de windows.
 
-```c#
-
-	// Ip del dispositivo biometrico
-	private const string _IP_BIOMETRICO = "192.168.1.201";
-	
-	// Puerto del socket en que escucha conexiones
-	private const string _PORT_SOCKET = "2012";
-	
-```
-* La ip del socket se toma por defecto como "127.0.0.1" ó "localhost"
-
-#### METODOS Y EVENTOS DEL LECTOR
-
-##### METODOS 
- 
-```c#
-	public void CapturarHuella(String usuarioID) {}
-```
-```c#
-	public string RecuperarHuella(string usuarioID){} 
-```
-```c#
-	public void RegistrarCarnet(string Carnet, string Nombre, string usuarioID) {}
+1. Primer retorno
+```json
+{
+    "type"   : "regcard",
+    "payload": {
+        "card": "myNumberCard"
+    } 
+}
 ```
 
-##### EVENTOS DEL LECTOR
-```c#
-	private void GetCard(int card) {}
+2. Segundo retorno
+```json
+{
+    "type"   : "card",
+    "payload": {
+        "user": "myUserId"
+    }
+}
 ```
 
-```c#
-	private void GetType
-	(
-		string a, 
-		int b, 
-		int c, 
-		int d, 
-		int e, 
-		int f, 
-		int g, 
-		int h, 
-		int i, 
-		int j, 
-		int k
-	){}
+En este caso solo necesitmaos el segundo retorno. podemos ignorar siempre el primer retorno.
+
+#### Fingerprint
+Cuando existe un usuario en el dispositivo biometrico, con la huella especificada, el servidor retorna lo siguiente:
+
+```json
+{
+    "type"   : "finger",
+    "payload": {
+        "user": "myUserId"
+    }
+}
 ```

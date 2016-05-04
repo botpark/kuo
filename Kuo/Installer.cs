@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace BPark
 {
     [RunInstaller(true)]
-    public partial class ProjectInstaller : System.Configuration.Install.Installer
+    public partial class Installer : System.Configuration.Install.Installer
     {
-        public ProjectInstaller()
+        public Installer()
         {
             InitializeComponent();
         }

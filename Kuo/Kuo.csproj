@@ -72,28 +72,25 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
-    <Compile Include="BPark.cs">
+    <Compile Include="Kuo.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="BPark.Designer.cs">
-      <DependentUpon>BPark.cs</DependentUpon>
+    <Compile Include="Kuo.Designer.cs">
+      <DependentUpon>Kuo.cs</DependentUpon>
     </Compile>
     <Compile Include="DynamicJsonConverter.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="ProjectInstaller.cs">
+    <Compile Include="Installer.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ProjectInstaller.Designer.cs">
-      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    <Compile Include="Installer.Designer.cs">
+      <DependentUpon>Installer.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="modules\zkemkeeper.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ProjectInstaller.resx">
-      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    <EmbeddedResource Include="Installer.resx">
+      <DependentUpon>Installer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

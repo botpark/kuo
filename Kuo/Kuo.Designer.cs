@@ -1,6 +1,6 @@
 ﻿namespace BPark
 {
-    partial class BPark
+    partial class Kuo
     {
         /// <summary> 
         /// Required designer variable.

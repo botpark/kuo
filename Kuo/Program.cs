@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ServiceProcess;
 
 namespace BPark
 {
@@ -15,15 +10,16 @@ namespace BPark
         static void Main()
         {
             #if DEBUG
-                        BPark _service = new BPark();
+                        Kuo _service = new Kuo();
                         _service.OnDebug();
                         System.Threading.Thread.Sleep(System.Threading.Timeout.Infinite);
             #else
                         ServiceBase[] ServicesToRun;
                         ServicesToRun = new ServiceBase[]
                         {
-                            new BPark()
+                            new Kuo()
                         };
+
                         ServiceBase.Run(ServicesToRun);
             #endif
         }

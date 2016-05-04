@@ -10,7 +10,7 @@ using System.Web.Script.Serialization;
 
 namespace BPark
 {
-    public partial class BPark : ServiceBase
+    public partial class Kuo : ServiceBase
     {
         #region Constantes
         private const string _IP_BIOMETRICO = "192.168.1.201";
@@ -21,7 +21,7 @@ namespace BPark
 
         private WebSocketServer appServer;
 
-        public BPark()
+        public Kuo()
         {
             InitializeComponent();
         }
@@ -94,7 +94,7 @@ namespace BPark
 
                 string json = @"data =
                     {
-                        'type': '" + "fingerout" + @"',
+                        'type': '" + "getfinger" + @"',
                         'payload': [
                             {
                                 'user'  : '" + h.Identidad + @"',
@@ -211,25 +211,26 @@ namespace BPark
             
             switch (type)
             {
-                case "cardin":
+                case "recordcard":
                     user = obj.payload[0].user;
                     string card = obj.payload[0].card;
                     string name = obj.payload[0].name;
                     this.RegistrarCarnet(card,name,user);
                     break;
-                case "fingerin":
+                case "recordfinger":
                     user = obj.payload[0].user;
                     this.CapturarHuella(user);
                     break;
-                case "fingerout":
+                case "getfinger":
                     user = obj.payload[0].user;
                     string data = RecuperarHuella(user);
                     session.Send(data);
                     break;
-                case "connect":
+                case "reconnect":
                     ReconectBiometric();
                     break;
                 default:
+			session.Send("Evento No Registrado");
                     break;
             }
             
