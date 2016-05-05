@@ -41,11 +41,11 @@
             // 
             this.KuoService.Description = "Servicio que gestiona el dispositivo biometrico";
             this.KuoService.DisplayName = "Kuo";
-            this.KuoService.ServiceName = "BPark";
+            this.KuoService.ServiceName = "Kuo";
             this.KuoService.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             this.KuoService.AfterInstall += new System.Configuration.Install.InstallEventHandler(this.serviceInstaller1_AfterInstall);
             // 
-            // ProjectInstaller
+            // Installer
             // 
             this.Installers.AddRange(new System.Configuration.Install.Installer[] {
             this.Kuo,
